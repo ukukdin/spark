@@ -1,0 +1,15 @@
+package SparkScalaSession
+
+import org.apache.spark.sql.SparkSession
+
+
+object session1 {
+
+  def SparkSession():SparkSession = {
+    
+  SparkSession.builder().appName("Scala_Spark").master("local").getOrCreate()
+    
+    
+  }
+  
+}

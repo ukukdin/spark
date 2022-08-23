@@ -1,0 +1,20 @@
+package Spark_Scala
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+object LazyEvaluation {
+ def main(args: Array[String]): Unit = {
+            val conf = new SparkConf()
+              .setAppName("WordCount")
+              .setMaster("local")
+           val sc = new SparkContext(conf)
+           val data = sc.textFile("outputt.txt")
+           val distData = data.map(r=>r+"_map")
+           print(distData.count+"카운트된값")
+           val dat = sc.textFile("outputt.txt")
+           print(dat.count+"변경된값")
+ } 
+ 
+}

@@ -1,0 +1,27 @@
+package Spark_Scala
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+object LazyEvaluation {
+ def main(args: Array[String]): Unit = {
+            val conf = new SparkConf()
+              .setAppName("Lazy Evaluatoin")
+              .setMaster("local")
+              
+           val sc = new SparkContext(conf)
+           val data = sc.textFile("outputt.txt")
+           val distData = data.map(r=>r+"_map")
+           print(distData.count+"카운트된값")
+//           val dat = sc.textFile("outputt.md")
+//           print(dat.count+"변경된값")
+         
+           
+           val rdd_wc = sc.textFile("outputt.txt").flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _) 
+//           val rdd_wc = sc.textFile("outputt.md")
+           println(rdd_wc+"rddwc값입니다. 확인해보시죠")
+ } 
+ 
+ 
+}

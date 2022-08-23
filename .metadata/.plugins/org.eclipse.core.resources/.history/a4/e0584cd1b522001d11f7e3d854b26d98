@@ -1,0 +1,20 @@
+package Spark_Scala
+
+import SparkScalaSession.session1
+
+object demo {
+  def main(args: Array[String]): Unit = {
+    
+    val spark = session1.SparkSession()
+    
+    import spark.implicits._
+    //Employee Data
+    
+    val empDF = Seq((10,"holl",100),(11,"Hando",200),(12, "matho",300)).toDF("EmpId","EmpName","DepId")
+    //Department Data 
+    val defDF = Seq((100,"IT"),(200,"Account"),(300,"HR")).toDF("DepId","DepName")
+    
+    //Resultant data 
+    val resultant = empDf.join(depDF,"DepId").select($"EmpName","DepName")
+  }
+}

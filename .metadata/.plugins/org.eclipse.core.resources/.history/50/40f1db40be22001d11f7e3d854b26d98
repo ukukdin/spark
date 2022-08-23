@@ -1,0 +1,24 @@
+package Spark_Scala
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+
+object ShuffleByRepartition {
+  def main(args: Array[String]): Unit = {
+    
+  
+   val conf = new SparkConf()
+              .setAppName("ShuffleByRepartition")
+              .setMaster("local")
+              
+             val sc = new SparkContext(conf)
+             val data = sc.textFile("outputt.txt")
+             println(data.getNumPartitions)
+             val distData = data.map(r =>r+"_map")
+             print(distData.getNumPartitions)// 다른 파티션과 전혀 간섭이 없는 map스타일의 작업은 트랜스포매이션은 파티션의 변화가 없습니다.                
+  
+  } 
+             
+}
