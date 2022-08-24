@@ -1,0 +1,30 @@
+package Spark_Scala
+
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+object cachedRDDbyName {
+  def main(args: Array[String]): Unit = {
+      val conf = new SparkConf()
+              .setAppName("ShuffleByRepartition")
+              .setMaster("local")
+              
+             val sc = new SparkContext(conf)
+      
+      val data = sc.textFile("dataoutputt.txt")
+      val distData = data.map(r => r+ "_map")
+      distData.setName("data")
+      distData.name = "distData"
+      data.cache
+      distData.cache
+      sc.getPersistentRDDs // 맵형태로 값을 리턴해준다.  --캐시 설정된 rdd 목록 확인 (우리가 방대한 양이 있다면 다시 봐야하지 않을까?) map[RDd Id,RDD] 웹 ui 의 stroage 랩고 ㅏ비교 ??? 아직업삳.
+      sc.getPersistentRDDs.foreach(println)
+      
+      distData.collect //--action 수행 distdata만 action 실행 했는데 data, distData 둘다 캐시됨.) 
+      sc.getPersistentRDDs.filter(x =>x._2.name.eqauls("data")).foreach(x=>x._2.unpersist())
+          
+      
+  }
+}
