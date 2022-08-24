@@ -1,0 +1,29 @@
+package Spark_Scala
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+object CacheSize {
+  
+  def main(args: Array[String]): Unit = {
+    
+		  val conf = new SparkConf()
+				  .setAppName("cachesize")
+				  .setMaster("local")
+				  
+				  val sc = new SparkContext(conf)
+				  
+				  val intRdd = sc.parallelize(1 to 10000)
+				  intRdd.name = "intRdd"
+				  println(intRdd.cache)
+				  println(intRdd.count)
+				  val strRdd = intRdd.map(_.toString)
+				  strRdd.name = "strRdd"
+				  println(strRdd.cache)
+				  println(strRdd.count)
+				  case class strCase (str: String)
+				  val strCaseRdd = intRdd.map(x => StrCase(x.tostring))
+  }
+  
+}

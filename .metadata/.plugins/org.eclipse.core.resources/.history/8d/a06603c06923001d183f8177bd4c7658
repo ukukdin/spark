@@ -1,0 +1,32 @@
+package Spark_Scala
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+object PartitionFiles {
+  def main(args: Array[String]): Unit = {
+     val conf = new SparkConf()
+              .setAppName("partitionaFiles")
+              .setMaster("local")
+              
+             val sc = new SparkContext(conf)
+             val rddd = sc.textFile("dataoutputt.txt")
+             rddd.getNumPartitions
+             val rdd2 = sc.textFile("NOTICE")
+             rdd2.getNumPartitions
+             val rdd3 = sc.textFile("dataoutputt.txt,NOTICE")
+             rdd3.getNumPartitions
+             val rdd4 = sc.textFile("out*,NO*,put*")
+             rddd.saveAsTextFile("rdd")
+             rdd2.saveAsTextFile("rdd2")
+             rdd3.saveAsTextFile("rdd3")
+             rdd4.saveAsTextFile("rdd4")
+             val rdd5 = rdd.union(rdd2).union(rdd3).union(rdd4)
+             print(rdd5.getNumPartitions)
+             
+             val rdd6 = rdd5.map(x => {Thread.sleep(1); x * x })
+             print("지금 나오는 값을 봅시다."+rdd6.foreachPartition (iterator => {println(s">>>> partition index: ${org.apache.spark.TaskContext.get.partitionId} partition data size:${iterator.size}.....")})
+        
+                 
+     }
+}

@@ -1,0 +1,11 @@
+package Spark_Scala
+
+object PartitionFiles {
+  def main(args: Array[String]): Unit = {
+     val conf = new SparkConf()
+              .setAppName("Lineage")
+              .setMaster("local")
+              
+             val sc = new SparkContext(conf)
+  }
+}

@@ -1,0 +1,11 @@
+package Spark_Scala
+
+object PartFiles {
+  def main(args: Array[String]): Unit = {
+       val conf = new SparkConf()
+				   .setAppName("partF")
+				   .setMaster("local")
+				   
+				   val sc = new SparkContext(conf)
+  }
+}

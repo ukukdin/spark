@@ -1,0 +1,38 @@
+package Spark_Scala
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+object PartFiles {
+  def main(args: Array[String]): Unit = {
+       val conf = new SparkConf()
+				   .setAppName("partF")
+				   .setMaster("local")
+				   
+				   val sc = new SparkContext(conf)
+       
+     
+				     val rdd = sc.parallelize(1 to 1000)
+       print(rdd.getNumPartitions)
+       val rdd2 = sc.parallelize(1 to 10)
+       print(rdd2.getNumPartitions)
+       val rdd3 = sc.parallelize(1 to 10000)
+       print(rdd3.getNumPartitions)
+       val rdd4 = sc.parallelize(1 to 2)
+       print(rdd4.getNumPartitions)
+       
+        val rdd5 = rdd.union(rdd2).union(rdd3).union(rdd4)
+				   
+			print("표시해놓을게요" + rdd5.getNumPartitions)
+				   
+				   val rd6 = rdd5.map(x => {Thread.sleep(1); x * x})
+  			   rd6.foreachPartition(iterator => {println(s">>>>partition index: ${org.apache.spark.TaskContext.get.partitionId} partition data size:${iterator.size}.....")})
+  			   
+  			   val rd7 = rdd5.repartition(8)
+  			   println(rd7.getNumPartitions)
+  			   val rd8 = rd7.map(x => {Thread.sleep(1); x * x})
+  			   
+  			   rd8.foreachPartition(iterator => {println(s">>>>partition index: ${org.apache.spark.TaskContext.get.partitionId} partition data size:${iterator.size}.....")})
+
+  			
+  }
+}

@@ -1,0 +1,16 @@
+package Spark_Scala
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+object PartitionFiles {
+  def main(args: Array[String]): Unit = {
+     val conf = new SparkConf()
+              .setAppName("partitionaFiles")
+              .setMaster("local")
+              
+             val sc = new SparkContext(conf)
+             val rdd = sc.textfile("dataoutputt.txt")
+             val 
+  }
+}

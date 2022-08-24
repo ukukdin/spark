@@ -1,0 +1,61 @@
+package Spark_Scala
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql._
+
+
+
+class MyMapper(n: Int) extends Serializable{ 
+  @transient lazy val log = org.apache.log4j.LogManager.getLogger("myLogger") 
+  
+  def dosomething(rdd: RDD[Int]): RDD[String] = 
+    rdd.map{ i =>   
+      log.warn("Serialization of: " + i)  
+      (i + n).toString 
+      }
+  }
+
+
+
+object CacheSize {
+  
+  def main(args: Array[String]): Unit = {
+    
+		  val conf = new SparkConf()
+				  .setAppName("cachesize")
+				  .setMaster("local")
+				  
+				  val sc = new SparkContext(conf)
+				  
+				  val intRdd = sc.parallelize(1 to 10000)
+				  intRdd.name = "intRdd"
+				  println(intRdd.cache)
+				  println(intRdd.count)
+			    val strRdd = intRdd.map(_.toString)
+				  strRdd.name = "strRdd"
+				  println(strRdd.cache)
+				  println(strRdd.count)
+//     	    case class strCase (str: String)
+//			    val strCaseRdd = intRdd.map(x => strCase(x.toString))
+
+//				  strCaseRdd.name = "strCaseRdd"
+//				  println(strCaseRdd.cache)
+//				  println(strCaseRdd.count)
+//				  //웹 ui 확인 (storage탭에서 캐시 size 확인) object (header 16 bytes), String(overhead 40 bytes, 2 bytes/char)
+//				  intRdd.unpersist()
+//				  strRdd.unpersist()
+//				  strCaseRdd.unpersist()
+				  val data = (1 to 10000).map(_.toString)
+				  println(data)
+				  val strRddd = sc.parallelize(data)
+				  strRddd.name ="strRdd"
+				  strRddd.cache
+				  strRddd.count()val strRdd2 = sc.makeRDD(data)
+				  strRdd2.setName("strRdd2")
+				  strRdd2.persist(org.apache.spark.storage.storageLevel.MEMORY_ONLY)
+  }
+  
+}

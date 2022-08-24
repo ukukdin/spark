@@ -1,0 +1,36 @@
+package Spark_Scala
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
+
+object PartitionF {
+   def main(args: Array[String]): Unit = {
+		   
+		   val conf = new SparkConf()
+				   .setAppName("partitionaFiles")
+				   .setMaster("local")
+				   
+				   val sc = new SparkContext(conf)
+				   val rd = sc.textFile("dataoutputt.txt")
+				   print(rd.getNumPartitions)
+				   val rd2 = sc.textFile("NOTICE")
+				   rd2.getNumPartitions
+				   val rd3 = sc.textFile("dataoutputt.txt,NOTICE")
+				   rd3.getNumPartitions
+				   val rd4 = sc.textFile("FR*,NO*,OR*")
+				   rd.saveAsTextFile("rd")
+				   rd2.saveAsTextFile("rd2")
+				   rd3.saveAsTextFile("rd3")
+				   rd4.saveAsTextFile("rd4")
+				   val rd5 = rd.union(rd2).union(rd3).union(rd4)
+				   print(rd5.getNumPartitions)
+				   
+				   val rd6 = rd5.map(x => {Thread.sleep(1); x * x })
+				   print("지금 나오는 값을 봅시다."+rd6.foreachPartition (iterator => {println(s">>>> partition index: ${org.apache.spark.TaskContext.get.partitionId} partition data size:${iterator.size}.....")})                
+				   
+     
+   }
+      
+  
+}

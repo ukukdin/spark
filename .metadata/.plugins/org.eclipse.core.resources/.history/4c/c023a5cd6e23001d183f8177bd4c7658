@@ -1,0 +1,7 @@
+package Spark_Scala
+
+object based {
+  def main(args: Array[String]): Unit = {
+    print("helloJavaworld")
+  }
+}
